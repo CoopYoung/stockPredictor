@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Best stocks to buy</title>
+</head>
+<body>
+    <h1>Best stock to buy : {{ stock }}</h1>
+    <br>
+    <img src="{{ url_for('static', filename='plot.png') }}" alt="Stock Prediction Plot">
+    <p>Low: {{ predictions }}</p>
+    <a href="/">Go back</a>
+    <p>Mean Squared Error (MSE): {{ mse }}</p>
+    <p>Mean Absolute Error (MAE): {{ mae }}</p>
+    <p>R² Score: {{ r2 }}</p>
+</body>
+</html>
