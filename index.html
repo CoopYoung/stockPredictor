@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Prediction</title>
+    <style>
+        body {
+            background-image: url('{{ url_for('static', filename='logo-square-transparent-bw.png') }}');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            text-align: center;
+            margin-top: 150px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            width: 300px;
+        }
+        input[type="submit"] {
+            padding: 10px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Stock Prediction API</h1>
+        <form action="/" method="POST">
+            <label for="symbol">Enter Stock Symbol:</label>
+            <input type="text" id="symbol" name="symbol" required>
+            <input type="submit" value="Get Prediction">
+        </form>
+
+        {% if prediction %}
+            <div class="result">
+                <h3>Predicted Price for {{ prediction['stock_symbol'] }}:</h3>
+                <p>${{ prediction['predicted_price'] }}</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

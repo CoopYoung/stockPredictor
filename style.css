@@ -1,0 +1,9 @@
+body {
+    background-image: url('/static/logo-square-transparent-bw.png');
+    background-size: contain; /* This ensures the image is contained in the background */
+    background-repeat: no-repeat;
+    background-position: center; /* Centers the image */
+    background-attachment: fixed; /* Makes the background stay fixed while scrolling */
+    height: 100vh; /* Ensure the body covers the full height of the page */
+    background-color: #f0f0f0; /* Optional: Set a background color in case the logo is too small */
+}
