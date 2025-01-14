@@ -3,10 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock Prediction</title>
+    <title>Stock Prediction 
+    </title>
+    <style>
+        body {
+            background-image: url('{{ url_for('static', filename='logo-square-transparent-bw.png') }}');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            text-align: center;
+            margin-top: 150px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            width: 300px;
+        }
+        input[type="submit"] {
+            padding: 10px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 20px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Enter Ticker Symbol for Share Prediction</h1>
+    <h1>Enter Ticker Symbol for Share Prediction
+        <style>
+            .container {
+                text-align: center;
+                margin-top: 150px;
+            }
+            .result {
+            margin-top: 20px;
+            font-size: 40px;
+            }
+        </style>
+    </h1>
     <p>Enter the ticker symbol of the stock you want to predict.</p>
     <form action="/predict" method="post">
         <label for="ticker">Ticker:</label>
