@@ -16,3 +16,4 @@ dependencies:
     - # Add any pip-only dependencies here
     - datetime
     - flask
+    - plotly
