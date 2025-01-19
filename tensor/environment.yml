@@ -1,0 +1,17 @@
+name: stock-predictor
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.8
+  - pip
+  - pip:
+    - yfinance==0.2.18
+    - pandas==1.5.3
+    - numpy==1.23.5
+    - tensorflow==2.12.0
+    - flask==2.3.2
+    - dash==2.9.3
+    - plotly==5.14.1
+    - scikit-learn==1.2.2
+    - gunicorn==20.1.0
