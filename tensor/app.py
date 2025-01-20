@@ -59,10 +59,18 @@ def prepare_data(ticker, start_date, end_date):
 
 # Modified Layout with initial graph
 app.layout = html.Div([
-    html.H1("Stock Price Prediction Dashboard", 
-            style={'textAlign': 'center', 'marginBottom': '20px'}),
-    
-    html.Div([
+    html.H1("Stock Price Prediction", 
+            style={'textAlign': 'center', 'marginBottom': '20px'},
+            className='head-title'),
+    html.P("Created by: AI is the Ally LLC",
+           style={'textAlign': 'center', 'marginBottom': '20px'},
+           className='head-title'),
+         html.Div([
+            html.Img(
+                src='/assets/logo.png',
+                className='logo-image'
+            ),
+        ], className='logo-header'),
         # Dropdown for predefined tickers
         html.Div([
             html.Label("Select from popular tickers:"),
@@ -72,8 +80,10 @@ app.layout = html.Div([
                         for ticker in AVAILABLE_TICKERS],
                 value='AAPL'  # Set default value
             ),
+             
         ], style={'width': '48%', 'display': 'inline-block'}),
         
+       
         # Custom ticker input
         html.Div([
             html.Label("Or enter custom ticker:"),
@@ -83,7 +93,7 @@ app.layout = html.Div([
                 placeholder='Enter custom ticker (e.g., UBER)',
             ),
         ], style={'width': '48%', 'display': 'inline-block', 'float': 'right'}),
-    ]),
+    
     
     html.Div([
         html.Button(

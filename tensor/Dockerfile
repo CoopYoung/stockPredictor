@@ -3,6 +3,7 @@ FROM continuumio/miniconda3
 WORKDIR /app
 
 COPY environment.yml .
+COPY assets/ ./assets/
 COPY . .
 
 RUN conda env create -f environment.yml
