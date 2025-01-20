@@ -4,6 +4,29 @@ from sklearn.preprocessing import MinMaxScaler
 from textblob import TextBlob
 import yfinance as yf
 
+def get_all_stocks():
+    csvfile = "assets/nasdaq_screener.csv" #Saved locally 
+    stock_data = pd.read_csv(csvfile) 
+    stock_data_list = list(stock_data["Symbol"]) #Only the tickers 
+
+    spec_columns = stock_data[["Symbol", "Market Cap", "Volume"]] #tickers, market cap, and volume
+   
+    volume_data_list = list(stock_data["Volume"])
+    market_cap_list = list(stock_data["Market Cap"])
+    sdl = {}
+
+    i = 0
+    for stock in stock_data_list:
+        if isinstance(stock, str) and '^' not in stock:
+            sdl[stock] = {"Market Cap" : market_cap_list[i], "Volume" : volume_data_list[i]}
+        i += 1
+
+    for index, row in spec_columns.iterrows():
+        symbol = row["Symbol"]
+        spec_columns.at[index, 'Symbol'] = str(symbol).replace("^", "")
+        
+    return spec_columns, sdl
+
 def calculate_technical_indicators(df):
     try:
         # Moving averages
