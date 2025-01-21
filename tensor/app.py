@@ -13,7 +13,7 @@ import sys
 from flask import Flask
 
 from models import create_advanced_model
-from analysis import calculate_technical_indicators, get_news_sentiment, calculate_risk_metrics, get_all_stocks
+from analysis import calculate_technical_indicators, calculate_optimal_window, get_news_sentiment, calculate_risk_metrics, get_all_stocks
 
 
 
@@ -28,8 +28,61 @@ server = Flask(__name__)
 app = dash.Dash(__name__, server=server)
 
 # Available tickers
-
 spec_columns, sdl = get_all_stocks()
+
+def create_multi_window_model(df, windows=[30, 60, 90]):
+    """
+    Create predictions using multiple window sizes
+    """
+    try:
+        # Prepare data
+        features = ['Close', 'Volume', 'RSI', 'MACD', 'BB_upper', 'BB_lower', 'SMA_20']
+        feature_data = df[features].values
+        scaler = MinMaxScaler()
+        scaled_data = scaler.fit_transform(feature_data)
+        
+        predictions = []
+        
+        for window in windows:
+            # Create sequences
+            X = []
+            y = []
+            for i in range(window, len(scaled_data)):
+                X.append(scaled_data[i-window:i])
+                y.append(scaled_data[i, 0])
+            
+            X = np.array(X)
+            y = np.array(y)
+            
+            if len(X) == 0:
+                logger.warning(f"Not enough data for window size {window}")
+                continue
+            
+            # Train model
+            model, lr_scheduler = create_advanced_model(sequence_length=window)
+            model.fit(X, y, batch_size=32, epochs=10, verbose=0)
+            
+            # Make prediction
+            last_sequence = scaled_data[-window:].reshape(1, window, 7)
+            pred = model.predict(last_sequence, verbose=0)
+            
+            # Convert prediction back to price
+            pred_array = np.zeros((1, 7))
+            pred_array[0, 0] = pred[0]
+            price_pred = scaler.inverse_transform(pred_array)[0, 0]
+            
+            predictions.append(price_pred)
+        
+        if not predictions:
+            raise ValueError("No valid predictions generated")
+            
+        # Return ensemble prediction (average)
+        return np.mean(predictions)
+        
+    except Exception as e:
+        logger.error(f"Error in create_multi_window_model: {str(e)}")
+        raise
+
 
 def get_scalar_value(series_or_value):
     """Convert pandas Series or numpy array to scalar value"""
@@ -186,7 +239,7 @@ def update_dashboard(n_clicks, ticker, timeframe):
         logger.info(f"Processing request for {ticker} with timeframe {timeframe}")
         # Get data
         end_date = datetime.now()
-        extra_days = 120
+        extra_days = 250 #Increased for multiple window sizes
         if timeframe == '1mo':
             start_date = end_date - timedelta(days=30 + extra_days)
         elif timeframe == '3mo':
@@ -207,7 +260,7 @@ def update_dashboard(n_clicks, ticker, timeframe):
 
         df = calculate_technical_indicators(df)
         
-
+        # Calculate optimal windows based on market conditions
         
         # Create sequences with multiple features
         
@@ -229,13 +282,16 @@ def update_dashboard(n_clicks, ticker, timeframe):
         X = []
         y = []
         for i in range(60, len(scaled_data)):
-            sequence = scaled_data[i-60:i]
-            target = scaled_data[i, 0]  # Predicting Close price
+            #sequence = scaled_data[i-60:i]
+            #target = scaled_data[i, 0]  # Predicting Close price
         
-            if sequence.shape == (60, 7):
-                X.append(sequence)
-                y.append(target)
-
+            #Shape (60, 7) means 60 days of data with 7 features
+            # [[Close, Volume, RSI, MACD, BB_upper, BB_lower, SMA_20]*amount of days]
+            #if sequence.shape == (60, 7):
+            #    X.append(sequence)
+            #    y.append(target)
+            X.append(scaled_data[i-60:i])
+            y.append(scaled_data[i, 0])
         X = np.array(X)
         y = np.array(y)
         
@@ -263,9 +319,15 @@ def update_dashboard(n_clicks, ticker, timeframe):
                             verbose=0)
         
         # Make prediction
+        next_day_price = create_multi_window_model(df)
+        logger.info(f"Prediction complete - next day price: {next_day_price}")
+        train_loss = history.history['loss'][-1]
+        val_loss = history.history['val_loss'][-1]
+        '''
+        THIS IS COMMENTED OUT UNTIL I REALIZE WHICH WINDOW IS BEST
         last_60_days = scaled_data[-60:].reshape(1, 60, 7)  # 7 features
         next_day_pred = model.predict(last_60_days, verbose=0)
-        
+        print(f"NDP SHAPE: {next_day_pred.shape}")
         train_loss = history.history['loss'][-1]
         val_loss = history.history['val_loss'][-1]
 
@@ -279,7 +341,7 @@ def update_dashboard(n_clicks, ticker, timeframe):
        # next_day_price = scaler.inverse_transform(
        #     np.array([next_day_pred[0]] + [0] * (len(features)-1)).reshape(1, -1)
        # )[0][0]
-
+        '''
         # Get metrics
         metrics = calculate_metrics(df, next_day_price, train_loss, val_loss)
         
@@ -370,9 +432,9 @@ def update_dashboard(n_clicks, ticker, timeframe):
                 
                 # Create display components
         performance_metrics = html.Div([
-                html.P(f"Current Price: ${safe_format(metrics['current_price'], 'currency')}"),
+                html.P(f"Current Price: {safe_format(metrics['current_price'], 'currency')}"),
                 html.P(f"Price Change: {safe_format(metrics['price_change'], 'percentage')}"),
-                html.P(f"Predicted Price: ${safe_format(metrics['next_day_price'], 'currency')}"),
+                html.P(f"Predicted Price: {safe_format(next_day_price, 'currency')}"),
                 html.P(f"Model Training Loss: {safe_format(metrics['train_loss'], decimals=4)}"),
                 html.P(f"Model Validation Loss: {safe_format(metrics['val_loss'], decimals=4)}")
         ])

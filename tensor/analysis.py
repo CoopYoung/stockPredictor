@@ -96,3 +96,15 @@ def calculate_risk_metrics(df):
     }
     
     return metrics
+
+# Function to calculate optimal window size based on market volatility
+def calculate_optimal_window(df):
+    # Calculate volatility
+    volatility = df['Close'].pct_change().std()
+    
+    if volatility > 0.03:  # High volatility
+        return 30  # Shorter window for volatile markets
+    elif volatility > 0.02:  # Medium volatility
+        return 60
+    else:  # Low volatility
+        return 90

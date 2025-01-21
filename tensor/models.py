@@ -2,7 +2,7 @@ import tensorflow as tf
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Input, LSTM, Dense, Dropout, BatchNormalization
 
-def create_advanced_model():
+def create_advanced_model(sequence_length=60):
     ''' Initial model, changing so we can do Input(shape=(60, 7)) instead of input_shape=(60, 7)
 
     model = Sequential([
@@ -17,7 +17,7 @@ def create_advanced_model():
     ])
     '''
     # Define input layer
-    inputs = Input(shape=(60, 7))
+    inputs = Input(shape=(sequence_length, 7))
     
     # LSTM layers
     x = LSTM(100, return_sequences=True)(inputs)
