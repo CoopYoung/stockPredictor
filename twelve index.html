@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ar" id="htmlTag" dir="rtl">
+<head>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8229633209644649"
+     crossorigin="anonymous"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Youooo Chatbot</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #2A5C82;
+      --secondary: #3A86FF;
+      --background: #F8F9FA;
+      --text: #2D3436;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 800px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      margin: 3rem 0 1rem;
+      transition: transform 0.3s ease;
+    }
+
+    .logo {
+      width: 180px;
+      margin: 0 auto 2rem;
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 1rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: var(--secondary);
+    }
+
+    button {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.2s, opacity 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    button:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    .response-container {
+      margin-top: 2rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 1.5rem;
+      max-height: 60vh;
+      min-height: 150px;
+      overflow-y: auto;
+      background: #fff;
+      position: relative;
+      line-height: 1.7;
+    }
+
+    .response-content {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-size: 1rem;
+      text-align: justify;
+      overflow-wrap: anywhere;
+    }
+
+    .loading-indicator {
+      display: none;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .dot-flashing {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 5px;
+      background-color: var(--primary);
+      animation: dotFlashing 1s infinite linear;
+    }
+
+    @keyframes dotFlashing {
+      0% { opacity: 0.2; transform: translateY(0); }
+      50% { opacity: 1; transform: translateY(-3px); }
+      100% { opacity: 0.2; transform: translateY(0); }
+    }
+
+    .lang-toggle {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: var(--primary);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 25px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      z-index: 9999;
+      font-size: 0.9rem;
+      border: none;
+      cursor: pointer;
+    }
+
+    .about-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #0077b5;
+      color: white;
+      padding: 12px 25px;
+      border-radius: 25px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      z-index: 9999;
+      transition: transform 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .bmc-button {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 9999;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(42, 92, 130, 0.6);
+      border-radius: 4px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+        margin: 4rem 0.5rem 1rem;
+      }
+
+      .lang-toggle {
+        top: 10px;
+        left: 10px;
+        padding: 10px 15px;
+      }
+
+      .about-button {
+        bottom: 10px;
+        right: 10px;
+        padding: 10px 20px;
+      }
+
+      .bmc-button {
+        bottom: 10px;
+        left: 10px;
+      }
+
+      .response-container {
+        max-height: 50vh;
+        padding: 1rem;
+      }
+
+      button {
+        width: 100%;
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Language Toggle -->
+  <button id="lang-toggle" class="lang-toggle" onclick="toggleLanguage()">
+    <i class="fas fa-language"></i>
+    <span id="lang-text">التبديل إلى الإنجليزية</span>
+  </button>
+
+  <!-- LinkedIn Button -->
+  <a href="https://www.linkedin.com/in/ahmedaldulaimi?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BMe3pe7juRpmBgmmQJWbAWA%3D%3D" 
+     class="about-button" 
+     target="_blank"
+     id="about-link">
+    <i class="fab fa-linkedin"></i>
+    <span id="about-text">عن يووو</span>
+  </a>
+
+  <!-- Buy Me a Coffee Button -->
+  <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="askyouoo" data-color="#5F7FFF" data-emoji=""  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#ffffff" data-coffee-color="#FFDD00" ></script>
+
+  <div class="container">
+    <img src="/static/youooo-logo.png" alt="Youooo Logo" class="logo">
+    
+    <div class="form-group">
+      <form id="chat-form">
+        <input type="text" id="question" placeholder="اكتب سؤالك هنا" required>
+        <button type="submit" id="submit-btn">
+          <i class="fas fa-paper-plane"></i>
+          <span>إرسال</span>
+        </button>
+      </form>
+    </div>
+
+    <div class="form-group">
+      <form id="predict-form">
+        <input type="text" id="stock_symbol" placeholder="أدخل رمز السهم (مثل NVDA)" required>
+        <button type="submit" id="predict-btn">
+          <i class="fas fa-chart-line"></i>
+          <span>توقع السهم</span>
+        </button>
+      </form>
+    </div>
+
+    <div class="loading-indicator" id="loading">
+      <div class="dot-flashing"></div>
+    </div>
+
+    <div class="response-container">
+      <div class="response-content" id="response"></div>
+    </div>
+
+    <div id="chart" class="chart-container"></div>
+  </div>
+
+  <script>
+    function toggleLanguage() {
+      const htmlTag = document.getElementById('htmlTag');
+      const langText = document.getElementById('lang-text');
+      const aboutText = document.getElementById('about-text');
+      const elements = {
+        question: document.getElementById('question'),
+        stockSymbol: document.getElementById('stock_symbol'),
+        submitBtn: document.querySelector('#submit-btn span'),
+        predictBtn: document.querySelector('#predict-btn span')
+      };
+
+      if (htmlTag.getAttribute('lang') === 'ar') {
+        htmlTag.setAttribute('lang', 'en');
+        htmlTag.setAttribute('dir', 'ltr');
+        langText.textContent = 'Switch to Arabic';
+        aboutText.textContent = 'About Youooo';
+        elements.question.placeholder = 'Type your question here';
+        elements.stockSymbol.placeholder = 'Enter stock symbol (e.g., NVDA)';
+        elements.submitBtn.textContent = 'Send';
+        elements.predictBtn.textContent = 'Predict Stock';
+      } else {
+        htmlTag.setAttribute('lang', 'ar');
+        htmlTag.setAttribute('dir', 'rtl');
+        langText.textContent = 'التبديل إلى الإنجليزية';
+        aboutText.textContent = 'عن يووو';
+        elements.question.placeholder = 'اكتب سؤالك هنا';
+        elements.stockSymbol.placeholder = 'أدخل رمز السهم (مثل NVDA)';
+        elements.submitBtn.textContent = 'إرسال';
+        elements.predictBtn.textContent = 'توقع السهم';
+      }
+    }
+
+    async function handleFormSubmit(url, data, loadingId, responseId) {
+      const loading = document.getElementById(loadingId);
+      const response = document.getElementById(responseId);
+      const container = response.parentElement;
+      
+      try {
+        loading.style.display = 'block';
+        response.innerHTML = '';
+        
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        
+        const result = await res.json();
+        response.innerHTML = result.answer || result.prediction || 'No response received';
+        
+        // Auto-scroll to bottom
+        setTimeout(() => {
+          container.scrollTop = container.scrollHeight;
+        }, 100);
+
+        if (result.chart) {
+          document.getElementById('chart').innerHTML = result.chart;
+        }
+      } catch (error) {
+        response.innerHTML = `Error: ${error.message}`;
+      } finally {
+        loading.style.display = 'none';
+      }
+
+      // Add mutation observer for dynamic content changes
+      const observer = new MutationObserver(() => {
+        container.scrollTop = container.scrollHeight;
+      });
+      observer.observe(response, { childList: true, subtree: true });
+    }
+
+    document.getElementById('chat-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const question = document.getElementById('question').value;
+      await handleFormSubmit('/query', { question }, 'loading', 'response');
+      e.target.reset();
+    });
+
+    document.getElementById('predict-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const stockSymbol = document.getElementById('stock_symbol').value;
+      await handleFormSubmit('/predict', { stock_symbol: stockSymbol }, 'loading', 'response');
+      e.target.reset();
+    });
+
+    // Initialize language
+    toggleLanguage();
+  </script>
+</body>
+</html>.
